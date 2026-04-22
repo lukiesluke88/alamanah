@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../model/user.dart';
@@ -36,17 +35,25 @@ class UserViewModel extends ChangeNotifier {
       return;
     }
 
-    final q = query.toLowerCase();
-
-    final result = await FirebaseFirestore.instance
-        .collection('users')
-        .where('searchKeywords', arrayContains: q)
-        .get();
-
-    users = result.docs
-        .map((doc) => User.fromJson(doc.data(), doc.id))
-        .toList();
-
+    users = await _service.searchUsers(query);
     notifyListeners();
+  }
+
+  // -----------------------------
+  // REGISTER USER (NOW CLEAN)
+  // -----------------------------
+
+  Future<bool> registerUser(User user) async {
+    isLoading = true;
+    notifyListeners();
+
+    final result = await _service.registerUser(user);
+
+    await loadUsers();
+
+    isLoading = false;
+    notifyListeners();
+
+    return result;
   }
 }

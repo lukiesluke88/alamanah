@@ -3,7 +3,7 @@ import 'package:alamanah/view/home_page.dart';
 import 'package:alamanah/mobile_pages/language_switcher.dart';
 import 'package:alamanah/mobile_pages/login_page.dart';
 import 'package:alamanah/mobile_pages/profile_page.dart';
-import 'package:alamanah/mobile_pages/registration_page.dart';
+import 'package:alamanah/view/registration_page.dart';
 import 'package:alamanah/utills/utillities.dart';
 import 'package:flutter/material.dart';
 

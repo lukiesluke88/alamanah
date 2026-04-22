@@ -73,7 +73,7 @@ class MongoDatabase {
     try {
       await connect();
 
-      String idValue = user.id;
+      String idValue = "user.id";
 
       // If the value looks like: ObjectId("6912d7ebe31a0793a2000000")
       final match = RegExp(
