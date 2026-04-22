@@ -64,7 +64,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Successfully ${user.name} registered.")),
       );
+
       _clearForm();
+
+      Navigator.pop(context, true);
     } else {
       ScaffoldMessenger.of(
         context,

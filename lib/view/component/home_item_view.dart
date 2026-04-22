@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-import '../../mobile_pages/delete_user_page.dart';
+import '../delete_user_page.dart';
 import '../../model/user.dart';
 
 class HomeItemView extends StatelessWidget {

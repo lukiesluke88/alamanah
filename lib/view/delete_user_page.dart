@@ -1,8 +1,9 @@
 
-import 'package:alamanah/service/api_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../model/user.dart';
+import '../viewmodels/user_viewmodel.dart';
 
 class DeleteUserPage extends StatelessWidget {
   final User selectedUser;
@@ -10,34 +11,39 @@ class DeleteUserPage extends StatelessWidget {
   const DeleteUserPage({super.key, required this.selectedUser});
 
   Future<void> _deleteUser(BuildContext context) async {
-    try {
-      // final result = await MongoDatabase.deleteUser(selectedUser.email);
-      // final response = await ApiService.deleteUser(selectedUser.id);
+    final vm = context.read<UserViewModel>();
 
-      if (false) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${selectedUser.name} deleted successfully.')),
-        );
-        Navigator.pop(context, true); // Return true to indicate deletion
-      } else {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Failed to delete user.')));
-      }
+    try {
+      await vm.deleteUser(selectedUser.id!);
+
+      if (!context.mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${selectedUser.name} deleted successfully.')),
+      );
+
+      Navigator.pop(context, true);
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+      if (!context.mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final vm = context.watch<UserViewModel>();
+
     return Scaffold(
       appBar: AppBar(title: const Text('Delete User')),
+
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
+        child: vm.isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
@@ -45,17 +51,22 @@ class DeleteUserPage extends StatelessWidget {
               style: const TextStyle(fontSize: 18),
               textAlign: TextAlign.center,
             ),
+
             const SizedBox(height: 20),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
-                  onPressed: () => Navigator.pop(context), // Cancel
+                  onPressed: () => Navigator.pop(context),
                   child: const Text('Cancel'),
                 ),
+
                 ElevatedButton(
-                  onPressed: () => _deleteUser(context), // Delete
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                  onPressed: () => _deleteUser(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                  ),
                   child: const Text('Delete'),
                 ),
               ],
