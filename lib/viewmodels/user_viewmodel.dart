@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 
 import '../model/user.dart';
@@ -42,12 +44,11 @@ class UserViewModel extends ChangeNotifier {
   // -----------------------------
   // REGISTER USER (NOW CLEAN)
   // -----------------------------
-
-  Future<bool> registerUser(User user) async {
+  Future<bool> registerUser(User user, File? imageFile) async {
     isLoading = true;
     notifyListeners();
 
-    final result = await _service.registerUser(user);
+    final result = await _service.registerUser(user, imageFile);
 
     await loadUsers();
 

@@ -55,10 +55,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
       email: _emailController.text.trim(),
       age: int.parse(_ageController.text.trim()),
       mobile: _mobileController.text.trim(),
-      imageUrl: _pickedImage?.path,
     );
 
-    final success = await vm.registerUser(user);
+    final success = await vm.registerUser(user, _pickedImage);
 
     if (!mounted) return;
 

@@ -1,4 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../model/user.dart';
 
@@ -9,11 +14,27 @@ class UserFirebaseService {
   // CREATE / REGISTER USER
   // (Firestore auto-ID supported)
   // -----------------------------
-  Future<bool> registerUser(User user) async {
+  Future<bool> registerUser(User user, File? imageFile) async {
     try {
-      final docRef = _users.doc(); // 🔥 auto-generated ID
+      final docRef = _users.doc();
+      final userId = docRef.id;
 
-      final newUser = user.copyWith(id: docRef.id);
+      String? imageUrl;
+
+      if (imageFile != null) {
+        // 🔥 compress first
+        final compressedFile = await _compressImage(imageFile);
+
+        // fallback if compression fails
+        final fileToUpload = compressedFile ?? imageFile;
+
+        imageUrl = await uploadImage(fileToUpload, userId);
+      }
+
+      final newUser = user.copyWith(
+        id: userId,
+        imageUrl: imageUrl,
+      );
 
       await docRef.set({
         'name': newUser.name,
@@ -22,9 +43,8 @@ class UserFirebaseService {
         'gender': newUser.gender,
         'mobile': newUser.mobile,
         'email': newUser.email,
-        'imageUrl': newUser.imageUrl,
+        'imageUrl': imageUrl,
 
-        // 🔥 ALWAYS regenerate keywords on update
         'searchKeywords': User.generateSearchKeywords(
           user.name,
           user.lastName,
@@ -94,5 +114,42 @@ class UserFirebaseService {
     final result = await _users.where('searchKeywords', arrayContains: q).get();
 
     return result.docs.map((doc) => User.fromJson(doc.data(), doc.id)).toList();
+  }
+
+  Future<String?> uploadImage(File imageFile, String userId) async {
+    try {
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child('user_images')
+          .child('$userId.jpg');
+
+      await ref.putFile(imageFile);
+
+      final downloadUrl = await ref.getDownloadURL();
+
+      return downloadUrl;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<File?> _compressImage(File file) async {
+    try {
+      final dir = await getTemporaryDirectory();
+      final targetPath =
+          '${dir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+      final compressed = await FlutterImageCompress.compressAndGetFile(
+        file.absolute.path,
+        targetPath,
+        quality: 80, // 🔥 adjust (50–80 best range)
+      );
+
+      if (compressed == null) return null;
+
+      return File(compressed.path);
+    } catch (e) {
+      return null;
+    }
   }
 }
