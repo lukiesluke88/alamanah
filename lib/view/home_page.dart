@@ -1,4 +1,4 @@
-import 'package:alamanah/mobile_pages/edit_user_page.dart';
+import 'package:alamanah/view/update_user_page.dart';
 import 'package:alamanah/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
         transitionDuration: const Duration(milliseconds: 300),
         reverseTransitionDuration: const Duration(milliseconds: 300),
         pageBuilder: (context, animation, secondaryAnimation) =>
-            EditUserPage(user: user),
+            UpdateUserPage(user: user),
       ),
     );
 

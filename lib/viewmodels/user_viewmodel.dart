@@ -20,6 +20,16 @@ class UserViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> updateUser(User user) async {
+    await _service.updateUser(user);
+    await loadUsers();
+  }
+
+  Future<void> deleteUser(String id) async {
+    await _service.deleteUser(id);
+    await loadUsers();
+  }
+
   Future<void> search(String query) async {
     if (query.isEmpty) {
       await loadUsers();
@@ -33,20 +43,10 @@ class UserViewModel extends ChangeNotifier {
         .where('searchKeywords', arrayContains: q)
         .get();
 
-    users = result.docs.map((doc) {
-      return User.fromJson(doc.data());
-    }).toList();
+    users = result.docs
+        .map((doc) => User.fromJson(doc.data(), doc.id))
+        .toList();
 
     notifyListeners();
-  }
-
-  Future<void> deleteUser(String id) async {
-    await _service.deleteUser(id);
-    await loadUsers();
-  }
-
-  Future<void> updateUser(User user) async {
-    await _service.updateUser(user);
-    await loadUsers();
   }
 }

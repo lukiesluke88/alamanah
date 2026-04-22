@@ -12,9 +12,9 @@ class DeleteUserPage extends StatelessWidget {
   Future<void> _deleteUser(BuildContext context) async {
     try {
       // final result = await MongoDatabase.deleteUser(selectedUser.email);
-      final response = await ApiService.deleteUser(selectedUser.id);
+      // final response = await ApiService.deleteUser(selectedUser.id);
 
-      if (response.success) {
+      if (false) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('${selectedUser.name} deleted successfully.')),
         );

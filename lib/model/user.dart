@@ -31,14 +31,16 @@ class User {
       'mobile': mobile,
       'email': email,
       'imageUrl': imageUrl,
-      'searchKeywords': searchKeywords,
+
+      // 🔥 always auto-generate keywords
+      'searchKeywords': generateSearchKeywords(name, lastName),
     };
   }
 
   /// Create User from Firestore
-  factory User.fromJson(Map<String, dynamic> json) {
+  factory User.fromJson(Map<String, dynamic> json, String docId) {
     return User(
-      id: json['_id'] ?? '',
+      id: docId,
       name: json['name'] ?? '',
       lastName: json['last_name'] ?? '',
       age: json['age'] ?? 0,
@@ -50,17 +52,17 @@ class User {
     );
   }
 
-  /// Helper: generate keywords (use this before saving)
+  /// 🔥 SEARCH KEYWORDS GENERATOR
   static List<String> generateSearchKeywords(String name, String? lastName) {
-    final fullText = '${name.trim()} ${lastName ?? ''}'.toLowerCase().trim();
+    final fullText =
+    '${name.trim()} ${lastName ?? ''}'.toLowerCase().trim();
 
     final words = fullText.split(' ');
     final keywords = <String>{};
 
-    // full name (important for search)
+    // full name
     keywords.add(fullText);
 
-    // individual words + prefixes
     for (final word in words) {
       if (word.isEmpty) continue;
 
@@ -74,7 +76,6 @@ class User {
     return keywords.toList();
   }
 
-  /// Optional: copyWith (very useful in MVVM / Riverpod)
   User copyWith({
     String? id,
     String? name,
