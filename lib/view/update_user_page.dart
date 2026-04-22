@@ -92,7 +92,7 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Edit User")),
+      appBar: AppBar(title: const Text("Profile Update")),
       body: Form(
         key: _formKey,
         child: Padding(
@@ -107,6 +107,8 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
                 decoration: _inputDecoration("Name"),
               ),
 
+              const SizedBox(height: 10),
+
               // LAST NAME
               TextFormField(
                 controller: _lastNameController,
@@ -115,7 +117,7 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
                 decoration: _inputDecoration("Last Name"),
               ),
 
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
 
               // AGE
               TextFormField(
@@ -126,7 +128,7 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
                 decoration: _inputDecoration("Age"),
               ),
 
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
 
               // EMAIL
               TextFormField(
@@ -136,7 +138,7 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
                 decoration: _inputDecoration("Email"),
               ),
 
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
 
               // MOBILE
               TextFormField(
@@ -144,7 +146,7 @@ class _UpdateUserPageState extends State<UpdateUserPage> {
                 decoration: _inputDecoration("Mobile"),
               ),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
 
               Row(
                 children: [
