@@ -18,6 +18,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final _formKey = GlobalKey<FormState>();
 
   final _nameController = TextEditingController();
+  final _lastNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _mobileController = TextEditingController();
   final _ageController = TextEditingController();
@@ -49,6 +50,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
     final user = User(
       name: _nameController.text.trim(),
+      lastName: _lastNameController.text.trim(),
       gender: _gender,
       email: _emailController.text.trim(),
       age: int.parse(_ageController.text.trim()),
@@ -80,6 +82,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   // -----------------------------
   void _clearForm() {
     _nameController.clear();
+    _lastNameController.clear();
     _emailController.clear();
     _mobileController.clear();
     _ageController.clear();
@@ -99,6 +102,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   void dispose() {
     _nameController.dispose();
+    _lastNameController.dispose();
     _emailController.dispose();
     _mobileController.dispose();
     _ageController.dispose();
@@ -142,7 +146,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   validator: (v) => v == null || v.isEmpty ? "Required" : null,
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 15),
+
+                // LAST NAME
+                TextFormField(
+                  controller: _lastNameController,
+                  decoration: _inputDecoration("Last Name"),
+                  validator: (v) => v == null || v.isEmpty ? "Required" : null,
+                ),
+
+                const SizedBox(height: 15),
 
                 // AGE
                 TextFormField(
@@ -151,7 +164,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   decoration: _inputDecoration("Age"),
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 15),
 
                 // EMAIL
                 TextFormField(
@@ -159,7 +172,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   decoration: _inputDecoration("Email"),
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 15),
 
                 // MOBILE
                 TextFormField(
