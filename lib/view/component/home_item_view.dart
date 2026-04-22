@@ -1,11 +1,8 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-import '../delete_user_page.dart';
 import '../../model/user.dart';
+import '../delete_user_page.dart';
 
 class HomeItemView extends StatelessWidget {
   final User user;
@@ -44,8 +41,7 @@ class HomeItemView extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          DeleteUserPage(selectedUser: user),
+                      builder: (context) => DeleteUserPage(selectedUser: user),
                     ),
                   ).then((value) {
                     if (value == true) {
@@ -87,10 +83,7 @@ class HomeItemView extends StatelessWidget {
                     ),
                     Text(
                       user.email,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
+                      style: const TextStyle(fontSize: 14, color: Colors.grey),
                     ),
                   ],
                 ),
@@ -118,6 +111,8 @@ class HomeItemView extends StatelessWidget {
                       : 'assets/images/id_male.jpg',
                 ),
               ),
+
+              const SizedBox(height: 8),
 
               Row(
                 children: const [
